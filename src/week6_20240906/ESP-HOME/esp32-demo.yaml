@@ -1,0 +1,73 @@
+esphome:
+  name: esp32-demo
+  platform: ESP32
+  board: esp32dev
+
+# Configure the Wi-Fi settings
+# wifi:
+#   ssid: "MR200_5GHz"
+#   password: "wifi0mr200"
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot mode
+  ap:
+    ssid: "ESP32_AP_Fallback"
+    password: "12345678"
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API integration
+api:
+
+# Enable Over-the-Air (OTA) updates
+ota:
+  platform: esphome
+  password: "12345678" # Replace with a secure password
+
+# Enable the web server for debugging
+web_server:
+  port: 80
+
+mqtt:
+  broker: "broker.hivemq.com" # HiveMQ public broker address
+  port: 1883 # Default MQTT port
+  discovery: true # Enable discovery for Home Assistant integration
+
+# Define the push button and led output (switch)
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO13
+      mode: INPUT_PULLUP # Enable internal pull-up resistor
+    name: "Push Button"
+    id: button1
+    # filters:
+    #   - invert: true # Correctly formatted invert filter as a dictionary item in the list
+    on_press:
+      - delay: 1s
+      - switch.toggle: led_red
+      - logger.log: "Button pressed"
+      - mqtt.publish:
+          topic: "esphomeNN/esp32-demo/button"
+          payload: "pressed"
+    on_release:
+      - logger.log: "Button released"
+      - mqtt.publish:
+          topic: "esphomeNN/esp32-demo/button"
+          payload: "released"
+
+
+switch:
+  - platform: output
+    id: led_red
+    name: Output Led
+    output: output_led
+
+output:
+  - platform: gpio
+    pin: GPIO2
+    inverted: true
+    id: output_led

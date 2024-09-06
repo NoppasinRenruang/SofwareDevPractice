@@ -1,4 +1,4 @@
-import NavBar from '../../components/NavBar';
+import Page from '../../components/Page';
 import Blog from '../../components/Blog';
 import BlogTitle from '../../components/BlogTitle';
 import Task1_11 from '../../images/week2/Task1_11.png';
@@ -18,7 +18,7 @@ import Task2_26 from '../../images/week2/Task2_26.png';
 export default function Week2() {
     return (
         <>
-            <NavBar></NavBar>
+            <Page>
             <BlogTitle
                 title="Assignments: 2024-07-12"
                 description="Task 1: Installation of Arduino IDE software on an Ubuntu VM "
@@ -113,6 +113,7 @@ export default function Week2() {
                 date="18 Aug 2024"
                 categoryTitle="Upload"
             />
+            </Page>
         </>
     );
 }
